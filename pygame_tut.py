@@ -43,6 +43,7 @@ def crash():
 
 
 def gameloop():
+	counter = 0
 	x = (disp_width * 0.5)
 	y = (disp_height * 0.8)
 	car_xleft = 0
@@ -50,13 +51,14 @@ def gameloop():
 
 	obs_xcoord = random.randrange(0,disp_width)
 	obs_ycoord = -500
-	obs_speed = 10
+	obs_speed = 20
 	obs_width = 40
 	obs_height = 80
 	
 
 	alive = True 
 	while alive:
+		counter += 1
 		for event in pygame.event.get():
 			if event.type == pygame.QUIT:
 				alive = False 
@@ -90,9 +92,17 @@ def gameloop():
 		if obs_ycoord > disp_height:
 			obs_ycoord = 0 - obs_height
 			obs_xcoord = random.randrange(0,disp_width)
-		
+		if y < obs_ycoord+obs_height:
+			print('IN DANGER')
+			if x > obs_xcoord and x < obs_xcoord + obs_width or x+car_width > obs_xcoord and x + car_width < obs_xcoord:
+				crash()
+				time.sleep(3)
+				alive = False
+				
+		if counter % 50 == 0:
+			obs_speed += 20
 		pygame.display.update()
-		clock.tick(120)
+		clock.tick(60)
 gameloop()
 pygame.quit()
 quit()
