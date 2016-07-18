@@ -1,9 +1,12 @@
-import pygame,time
+import pygame,time,random
 
 pygame.init()
 
 disp_width = 800
 disp_height = 600
+
+car_width = 37
+car_height = 90
 
 black = ((0,0,0))
 white = ((255,255,255))
@@ -16,6 +19,9 @@ pygame.display.set_caption('Don\'t ask wtf this is')
 clock = pygame.time.Clock()
 
 carImg = pygame.image.load('Images.png')
+
+def obstacles(obs_x, obs_y, obs_width, obs_height, color):
+	pygame.draw.rect(gameDisplay, color, [obs_x, obs_y, obs_width, obs_height])
 
 def car(x,y):
 	gameDisplay.blit(carImg, (x,y))
@@ -41,6 +47,13 @@ def gameloop():
 	y = (disp_height * 0.8)
 	car_xleft = 0
 	car_xright = 0
+
+	obs_xcoord = random.randrange(0,disp_width)
+	obs_ycoord = -500
+	obs_speed = 10
+	obs_width = 40
+	obs_height = 80
+	
 
 	alive = True 
 	while alive:
@@ -69,9 +82,15 @@ def gameloop():
 				alive = False
 
 		gameDisplay.fill(white)
+
+		#def obstacles(obs1, obs2, obs_width, obs_height, color):
+		obstacles(obs_xcoord, obs_ycoord, obs_width, obs_height, black)
+		obs_ycoord += obs_speed
 		car(x,y)
-		print(event)
-		print('eatshit')
+		if obs_ycoord > disp_height:
+			obs_ycoord = 0 - obs_height
+			obs_xcoord = random.randrange(0,disp_width)
+		
 		pygame.display.update()
 		clock.tick(120)
 gameloop()
